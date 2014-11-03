@@ -2265,11 +2265,7 @@ csio_slave_alloc(struct scsi_device *sdev)
 static int
 csio_slave_configure(struct scsi_device *sdev)
 {
-	if (sdev->tagged_supported)
-		scsi_activate_tcq(sdev, csio_lun_qdepth);
-	else
-		scsi_deactivate_tcq(sdev, csio_lun_qdepth);
-
+	scsi_adjust_queue_depth(sdev, 0, csio_lun_qdepth);
 	return 0;
 }
 
@@ -2314,6 +2310,7 @@ struct scsi_host_template csio_fcoe_shost_template = {
 	.use_clustering		= ENABLE_CLUSTERING,
 	.shost_attrs		= csio_fcoe_lport_attrs,
 	.max_sectors		= CSIO_MAX_SECTOR_SIZE,
+	.use_blk_tags		= 1,
 };
 
 struct scsi_host_template csio_fcoe_shost_vport_template = {
@@ -2333,6 +2330,7 @@ struct scsi_host_template csio_fcoe_shost_vport_template = {
 	.use_clustering		= ENABLE_CLUSTERING,
 	.shost_attrs		= csio_fcoe_vport_attrs,
 	.max_sectors		= CSIO_MAX_SECTOR_SIZE,
+	.use_blk_tags		= 1,
 };
 
 /*
