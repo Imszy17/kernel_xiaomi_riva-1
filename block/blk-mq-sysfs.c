@@ -230,8 +230,6 @@ static ssize_t blk_mq_hw_sysfs_cpus_show(struct blk_mq_hw_ctx *hctx, char *page)
 	unsigned int i, first = 1;
 	int ret = 0, pos = 0;
 
-	blk_mq_disable_hotplug();
-
 	for_each_cpu(i, hctx->cpumask) {
 		if (first)
 			ret = snprintf(pos + page, size - pos, "%u", i);
@@ -245,7 +243,6 @@ static ssize_t blk_mq_hw_sysfs_cpus_show(struct blk_mq_hw_ctx *hctx, char *page)
 		pos += ret;
 	}
 
-	blk_mq_enable_hotplug();
 
 	ret = snprintf(pos + page, size + 1 - pos, "\n");
 	return pos + ret;
